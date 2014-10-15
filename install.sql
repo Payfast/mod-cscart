@@ -12,3 +12,6 @@ REPLACE INTO cscart_language_values (`lang_code`,`name`,`value`) VALUES ('EN','t
 REPLACE INTO cscart_language_values (`lang_code`,`name`,`value`) VALUES ('EN','text_debug','Debug');
 REPLACE INTO cscart_language_values (`lang_code`,`name`,`value`) VALUES ('EN','text_true','True');
 REPLACE INTO cscart_language_values (`lang_code`,`name`,`value`) VALUES ('EN','text_false','False');
+
+REPLACE INTO cscart_language_values (`lang_code`,`name`,`value`) VALUES ('EN','passphrase','ONLY INSERT A VALUE INTO THE SECURE PASSPHRASE IF YOU HAVE SET THIS ON THE INTEGRATION PAGE OF THE LOGGED IN AREA OF THE PAYFAST WEBSITE!!!!!');
+

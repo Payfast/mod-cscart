@@ -30,7 +30,12 @@
         </select>
     </div>
 </div>
-
+<div class="control-group">
+    <label class='control-label' for="passphrase">{__("passphrase")}:</label>
+    <div class="controls">
+        <input type="text" name="payment_data[processor_params][passphrase]" id="passphrase" value="{$processor_params.passphrase}" class="input-text" />
+    </div>
+</div>
 
 {include file="common/subheader.tpl" title=__("text_payfast_status_map") target="#text_payfast_status_map"}
 

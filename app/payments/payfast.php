@@ -50,6 +50,8 @@ if( $processor_data['processor_params']['mode'] == 'sandbox' ) {
     $pfHost = "www.payfast.co.za";
 }
 
+$passphrase = $processor_data['processor_params']['mode'] != 'sandbox' && !empty( $processor_data['processor_params']['passphrase'] ) ? $processor_data['processor_params']['passphrase'] : null;
+            
 // Return from payfast website
 if( defined('PAYMENT_NOTIFICATION') ) 
 {
@@ -96,9 +98,9 @@ if( defined('PAYMENT_NOTIFICATION') )
             if( !$pfError && !$pfDone )
             {
                 pflog( 'Verify security signature' );
-            
+
                 // If signature different, log for debugging
-                if( !pfValidSignature( $pfData, $pfParamString ) )
+                if( !pfValidSignature( $pfData, $pfParamString, $passphrase ) )
                 {
                     $pfError = true;
                     $pfErrMsg = PF_ERR_INVALID_SIGNATURE;
@@ -267,7 +269,16 @@ if( defined('PAYMENT_NOTIFICATION') )
     {
         $secureString .= $k.'='.urlencode(trim($v)).'&';              
     }
-    $secureString = substr( $secureString, 0, -1 );
+
+    if( !is_null( $passphrase ) )
+    {
+        $secureString .= 'passphrase='.urlencode( $passphrase );
+    }
+    else
+    {
+         $secureString = substr( $secureString, 0, -1 );
+    }
+   
     
     $securityHash = md5($secureString);
 
