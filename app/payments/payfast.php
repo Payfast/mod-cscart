@@ -37,10 +37,9 @@ if (empty($processor_data))
 define( 'PF_DEBUG', (bool)$processor_data['processor_params']['debug'] );
 
 include 'payfast/payfast_common.inc';
-
 $payfast_merchant_id = $processor_data['processor_params']['merchant_id'];
 $payfast_merchant_key = $processor_data['processor_params']['merchant_key'];
-    
+
 
 if( $processor_data['processor_params']['mode'] == 'sandbox' ) {
     $pfHost = "sandbox.payfast.co.za";
@@ -51,11 +50,11 @@ if( $processor_data['processor_params']['mode'] == 'sandbox' ) {
 }
 
 $passphrase = $processor_data['processor_params']['mode'] != 'sandbox' && !empty( $processor_data['processor_params']['passphrase'] ) ? $processor_data['processor_params']['passphrase'] : null;
-            
+
 // Return from payfast website
-if( defined('PAYMENT_NOTIFICATION') ) 
+if( defined('PAYMENT_NOTIFICATION') )
 {
-    if( $mode == 'notify' && !empty( $_REQUEST['order_id'] )) 
+    if( $mode == 'notify' && !empty( $_REQUEST['order_id'] ))
     {
         
         if (fn_check_payment_script('payfast.php', $_POST['m_payment_id'], $processor_data)) 
