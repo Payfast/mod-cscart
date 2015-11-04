@@ -282,6 +282,7 @@ if( defined('PAYMENT_NOTIFICATION') )
     $securityHash = md5($secureString);
 
     $payArray['signature'] = $securityHash;
+    $payArray['user_agent'] = 'CSCart 4.x';
     $inputs = '';
     foreach( $payArray as $k=>$v )
     {
