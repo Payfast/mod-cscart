@@ -36,32 +36,3 @@
         <input type="text" name="payment_data[processor_params][passphrase]" id="passphrase" value="{$processor_params.passphrase}" class="input-text" />
     </div>
 </div>
-
-{include file="common/subheader.tpl" title=__("text_payfast_status_map") target="#text_payfast_status_map"}
-
-
-{assign var="statuses" value=$smarty.const.STATUSES_ORDER|fn_get_simple_statuses}
-<div id='text_payfast_status_map'>
-    <div class="control-group">
-        <label class='control-label' for="payfast_completed">{__("completed")}:</label>
-        <div class="controls">
-            <select name="payment_data[processor_params][statuses][completed]" id="payfast_completed">
-                {foreach from=$statuses item="s" key="k"}
-                <option value="{$k}" {if (isset($processor_params.statuses.completed) && $processor_params.statuses.completed == $k) || (!isset($processor_params.statuses.completed) && $k == 'P')}selected="selected"{/if}>{$s}</option>
-                {/foreach}
-            </select>
-        </div>    
-    </div>
-
-    <div class="control-group">
-        <label class='control-label' for="payfast_failed">{__("failed")}:</label>
-        <div class="controls">
-            <select name="payment_data[processor_params][statuses][failed]" id="payfast_failed">
-                {foreach from=$statuses item="s" key="k"}
-                <option value="{$k}" {if (isset($processor_params.statuses.failed) && $processor_params.statuses.failed == $k) || (!isset($processor_params.statuses.failed) && $k == 'F')}selected="selected"{/if}>{$s}</option>
-                {/foreach}
-            </select>
-        </div>
-    </div>
-</div>
-
