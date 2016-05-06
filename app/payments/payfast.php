@@ -164,7 +164,8 @@ if( defined('PAYMENT_NOTIFICATION') )
                 {
                     case 'COMPLETE':
                         pflog( '- Complete' );
-                        $pp_response['order_status'] = $payfast_statuses['completed'];                        
+                        $pp_response['order_status'] = $payfast_statuses['completed']; 
+                        fn_change_order_status($_REQUEST['order_id'], 'O', '', false);                       
                         break;
         
                     case 'FAILED':
@@ -203,12 +204,6 @@ if( defined('PAYMENT_NOTIFICATION') )
     } elseif ($mode == 'return') {
         if (fn_check_payment_script('payfast.php', $_REQUEST['order_id'])) {
             $order_info = fn_get_order_info($_REQUEST['order_id'], true);
-
-            if ($order_info['status'] == STATUS_INCOMPLETED_ORDER) 
-            {
-                fn_change_order_status($_REQUEST['order_id'], 'O', '', false);
-
-            }
 
             if (fn_allowed_for('MULTIVENDOR')) 
             {
