@@ -1,7 +1,7 @@
 
 PayFast module for CS-Cart 4
 
-PayFast CS-CartModule v1.0.0 for CS-Cart v4.0.*
+PayFast CS-CartModule v1.0.4 for CS-Cart v4.0.*
 -------------------------------------------------------
 Copyright (c) 2013 PayFast (Pty) Ltd
 
