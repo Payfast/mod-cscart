@@ -1,7 +1,7 @@
 
 PayFast module for CS-Cart 4
 
-PayFast CS-CartModule v1.0.0 for CS-Cart v4.0.*
+PayFast CS-CartModule v1.0.4 for CS-Cart v4.0.*
 -------------------------------------------------------
 Copyright (c) 2008 PayFast (Pty) Ltd
 You (being anyone who is not PayFast (Pty) Ltd) may download and use this plugin / code in your own website in conjunction with a registered and active PayFast account. If your PayFast account is terminated for any reason, you may not use this plugin / code or part thereof.

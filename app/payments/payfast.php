@@ -176,14 +176,14 @@ if( defined('PAYMENT_NOTIFICATION') )
                 $pp_response['transaction_id'] = $transaction_id;
                 $pp_response['customer_email'] = $pfData['email_address'];
                 
-                if ($pp_response['order_status'] == $paypal_statuses['pending']) 
+                if ($pp_response['order_status'] == 'pending') 
                 {
                     fn_change_order_status($order_id, $pp_response['order_status']);
                 } 
                 else 
                 {
                     fn_finish_payment($order_id, $pp_response);
-                                    
+                    fn_order_placement_routines('route', $order_id);             
                 }
             }
         }
