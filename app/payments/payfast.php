@@ -269,7 +269,7 @@ if( defined('PAYMENT_NOTIFICATION') )
     $inputs = '';
     foreach( $payArray as $k=>$v )
     {
-       $inputs .=  "<input type='hidden' name='$k' value='$v' />\n";
+        $inputs .= '<input type="hidden" name="' . $k . '" value="' . $v . '"/>';
     }
 
     $msg = fn_get_lang_var('text_cc_processor_connection');
