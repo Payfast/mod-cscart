@@ -63,6 +63,15 @@ if( defined('PAYMENT_NOTIFICATION') )
                 header( 'HTTP/1.0 200 OK' );
                 flush();
             }
+
+            //If order is not new Notify PayFast and DIE
+            if( $order_info["status"] != "N" )
+            {
+                pflog( 'Order status '.$order_info["status"].' flush DIE' );
+                header( 'HTTP/1.0 200 OK' );
+                flush();
+                die;
+            } 
         
             //// Get data sent by PayFast
             if( !$pfError && !$pfDone )
