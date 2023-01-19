@@ -2,7 +2,7 @@
 /**
  * payfast.php
  *
- * Copyright (c) 2008 PayFast (Pty) Ltd
+ * Copyright (c) 2023 PayFast (Pty) Ltd
  * You (being anyone who is not PayFast (Pty) Ltd) may download and use this plugin / code in your own website in conjunction with a registered and active PayFast account. If your PayFast account is terminated for any reason, you may not use this plugin / code or part thereof.
  * Except as expressly indicated in this licence, you may not use, copy, modify or distribute this plugin / code or part thereof in any way.
  * 
@@ -28,28 +28,23 @@ include 'payfast/payfast_common.inc';
 $payfast_merchant_id = $processor_data['processor_params']['merchant_id'];
 $payfast_merchant_key = $processor_data['processor_params']['merchant_key'];
 
+$pfHost = $processor_data['processor_params']['mode'] == 'sandbox' ? "sandbox.payfast.co.za" : "www.payfast.co.za";
 
-if( $processor_data['processor_params']['mode'] == 'sandbox' ) {
-    $pfHost = "sandbox.payfast.co.za";
-    $payfast_merchant_id = "10000100";
-    $payfast_merchant_key = "46f0cd694581a";
-} else {
-    $pfHost = "www.payfast.co.za";
-}
-
-$passphrase = $processor_data['processor_params']['mode'] != 'sandbox' && !empty( $processor_data['processor_params']['passphrase'] ) ? $processor_data['processor_params']['passphrase'] : null;
+$passphrase = !empty( $processor_data['processor_params']['passphrase'] ) ? $processor_data['processor_params']['passphrase'] : null;
 
 // Return from payfast website
 if( defined('PAYMENT_NOTIFICATION') )
 {
+    /** @noinspection PhpUndefinedVariableInspection */
     if( $mode == 'notify' && !empty( $_REQUEST['order_id'] ))
     {
         
         if (fn_check_payment_script('payfast.php', $_POST['m_payment_id'], $processor_data)) 
         {  
             $pp_response = array();
-            $payfast_statuses = $processor_data['processor_params']['statuses'];
+            $payfast_statuses = fn_get_simple_statuses();
             $pfError = false;
+            $order_id = $_REQUEST['order_id'];
             $pfErrMsg = '';
             $pfDone = false;
             $pfData = array();      
@@ -132,19 +127,13 @@ if( defined('PAYMENT_NOTIFICATION') )
                     $pfErrMsg = PF_ERR_BAD_ACCESS;
                 }
             }
-            
-            //// Check data against internal order
-            if( !$pfError && !$pfDone )
+
+            //// Check data against internal order & Check order amount
+            if( !$pfError && !$pfDone && ( !pfAmountsEqual( $pfData['amount_gross'], fn_format_price( $order_info['total'] , $processor_data['processor_params']['currency'] ) ) ) )
             {
-               // pflog( 'Check data against internal order' );
-        
-                // Check order amount
-                if( !pfAmountsEqual( $pfData['amount_gross'], fn_format_price( $order_info['total'] , $processor_data['processor_params']['currency'] ) ) )
-                {
-                    $pfError = true;
-                    $pfErrMsg = PF_ERR_AMOUNT_MISMATCH;
-                }          
-                
+                $pfError = true;
+                $pfErrMsg = PF_ERR_AMOUNT_MISMATCH;
+
             }
             
             //// Check status and update order
@@ -159,18 +148,17 @@ if( defined('PAYMENT_NOTIFICATION') )
                 {
                     case 'COMPLETE':
                         pflog( '- Complete' );
-                        $pp_response['order_status'] = $payfast_statuses['completed']; 
-                        fn_change_order_status($_REQUEST['order_id'], 'O', '', false);                       
+                        $pp_response['order_status'] = $payfast_statuses['C'];
                         break;
         
                     case 'FAILED':
-                        pflog( '- Failed' );                       
-                        $pp_response['order_status'] = $payfast_statuses['denied'];        
+                        pflog( '- Failed' );
+                        $pp_response['order_status'] = $payfast_statuses['F'];
                         break;
         
                     case 'PENDING':
-                        pflog( '- Pending' );                   
-                        $pp_response['order_status'] = $payfast_statuses['pending'];
+                        pflog( '- Pending' );
+                        $pp_response['order_status'] = $payfast_statuses['O'];
                         break;
         
                     default:
@@ -190,43 +178,45 @@ if( defined('PAYMENT_NOTIFICATION') )
                 else 
                 {
                     fn_finish_payment($order_id, $pp_response);
-                    fn_order_placement_routines('route', $order_id);             
                 }
             }
         }
         exit;
 
     } elseif ($mode == 'return') {
-        if (fn_check_payment_script('payfast.php', $_REQUEST['order_id'])) {
-            $order_info = fn_get_order_info($_REQUEST['order_id'], true);
+        $order_id = $_REQUEST['order_id'];
+        if (fn_check_payment_script('payfast.php', $order_id)) {
+            $order_info = fn_get_order_info($order_id, true);
 
-            if (fn_allowed_for('MULTIVENDOR')) 
+            /** @noinspection PhpUndefinedConstantInspection */
+            if (fn_allowed_for('MULTIVENDOR') && ($order_info['status'] == STATUS_PARENT_ORDER))
             {
-                if ($order_info['status'] == STATUS_PARENT_ORDER) 
-                {
-                    $child_orders = db_get_hash_single_array("SELECT order_id, status FROM ?:orders WHERE parent_order_id = ?i", array('order_id', 'status'), $_REQUEST['order_id']);
 
-                    foreach ($child_orders as $order_id => $order_status) 
-                    {
-                        if ($order_status == STATUS_INCOMPLETED_ORDER) {
-                            fn_change_order_status($order_id, 'O', '', false);
-                        }
+                $child_orders = db_get_hash_single_array("SELECT order_id, status FROM ?:orders WHERE parent_order_id = ?i", array('order_id', 'status'), $order_id);
+
+                foreach ($child_orders as $order_id => $order_status)
+                {
+                    /** @noinspection PhpUndefinedConstantInspection */
+                    if ($order_status == STATUS_INCOMPLETED_ORDER) {
+                        fn_change_order_status($order_id, 'O', '', false);
                     }
                 }
+
             }
         }
-        fn_order_placement_routines('route', $_REQUEST['order_id'], false);
+        fn_order_placement_routines('route', $order_id, false);
 
-    } 
-    elseif ( $mode == 'cancel') 
+    }
+    elseif ( $mode == 'cancel')
     {
-        $order_info = fn_get_order_info( $_REQUEST['order_id'] );
+        $order_id = $_REQUEST['order_id'];
+        $order_info = fn_get_order_info( $order_id );
 
         $pp_response['order_status'] = 'N';
         $pp_response["reason_text"] = __('text_transaction_cancelled');
 
-        fn_finish_payment( $_REQUEST['order_id'], $pp_response, false);
-        fn_order_placement_routines( 'route', $_REQUEST['order_id']);
+        fn_finish_payment( $order_id, $pp_response, false);
+        fn_order_placement_routines( 'route', $order_id);
     }
 
 } else {
@@ -234,9 +224,12 @@ if( defined('PAYMENT_NOTIFICATION') )
 
     $total = fn_format_price( $order_info['total'] , $processor_data['processor_params']['currency'] );
     $m_payment_id = $order_info['order_id'];
+    /** @noinspection PhpUndefinedConstantInspection */
     $return_url = fn_url("payment_notification.return?payment=payfast&order_id=$m_payment_id", AREA, 'current');
+    /** @noinspection PhpUndefinedConstantInspection */
     $cancel_url = fn_url("payment_notification.cancel?payment=payfast&order_id=$m_payment_id", AREA, 'current');
-    $notify_url = fn_url("payment_notification.notify?payment=payfast&order_id=$m_payment_id", AREA, 'current'); 
+    /** @noinspection PhpUndefinedConstantInspection */
+    $notify_url = fn_url("payment_notification.notify?payment=payfast&order_id=$m_payment_id", AREA, 'current');
 
     $payArray = array(
                 'merchant_id'   =>$payfast_merchant_id,
