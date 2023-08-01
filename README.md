@@ -42,11 +42,4 @@ In order to make the module ‘LIVE’, follow the instructions below:
 7. Merchant Key = ‘merchant_key available on Integration Page‘
 8. Click Save
 
-
-******************************************************************************
-
-    Please see the URL below for all information concerning this module:
-
-                 https://www.payfast.co.za/shopping-carts/cs-cart/
-
-******************************************************************************
+Please [click here](https://payfast.io/integration/shopping-carts/cs-cart/) for more information concerning this module.
