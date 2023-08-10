@@ -1,4 +1,4 @@
-# mod-cscart-4
+# mod-cscart
 
 PayFast module for CS-Cart 4
 
