@@ -13,8 +13,8 @@ to [contact the Payfast support team](https://payfast.io/contact/) should you re
 3. Click **Local** and select **payfast.zip**. Now click **Upload & Install**.
 4. Navigate to **Add-ons** -> **Downloaded add-ons** and ensure that **Payfast** is active.
 5. Navigate to **Settings** -> **Payment methods** -> **Add payment method**.
-6. Click the **Processor** dropdown and select **Payfast**. Configure the add-on settings accordingly, and then select *
-   *Create**.
+6. Click the **Processor** dropdown and select **Payfast**. Configure the add-on settings accordingly, and then select
+**Create**.
 
 Please [click here](https://payfast.io/integration/plugins/cs-cart/) for more information concerning this module.
 
