@@ -1,0 +1,26 @@
+<?xml version="1.0"?>
+<!--
+/*
+ * Copyright (c) 2025 Payfast (Pty) Ltd
+ *
+ * Author: App Inlet (Pty) Ltd
+ *
+ * Released under the GNU General Public License
+ */
+-->
+<addon scheme="3.0">
+    <id>payfast</id>
+    <version>1.1.0</version>
+    <status>active</status>
+    <name>Payfast</name>
+    <default_language>en</default_language>
+    <description>Payfast Payment Gateway</description>
+    <supplier>Payfast</supplier>
+    <translations>
+        <item language="en" filename="addons/payfast.po"/>
+    </translations>
+    <functions>
+        <install>fn_payfast_install</install>
+        <uninstall>fn_payfast_uninstall</uninstall>
+    </functions>
+</addon>
