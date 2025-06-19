@@ -1,0 +1,46 @@
+msgid ""
+msgstr "Project-Id-Version: tygh\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Language-Team: English\n"
+"Language: en_US"
+
+
+msgctxt "Languages::text_payfast_status_map"
+msgid "text_payfast_status_map"
+msgstr "Payfast payment status to CS-Cart order status conversion map"
+
+msgctxt "Languages::text_payfast_sandbox_live"
+msgid "text_payfast_sandbox_live"
+msgstr "Sandbox/Live"
+
+msgctxt "Languages::sandbox"
+msgid "sandbox"
+msgstr "Sandbox"
+
+msgctxt "Languages::text_payfast_paynow"
+msgid "text_payfast_paynow"
+msgstr "Pay Now Using Payfast"
+
+msgctxt "Languages::text_payfast_item_name"
+msgid "text_payfast_item_name"
+msgstr "Your Order"
+
+msgctxt "Languages::text_payfast_item_description"
+msgid "text_payfast_item_description"
+msgstr "Shipping, Handling, Discounts and Taxes Included"
+
+msgctxt "Languages::text_debug"
+msgid "text_debug"
+msgstr "Debug"
+
+msgctxt "Languages::text_true"
+msgid "text_true"
+msgstr "True"
+
+msgctxt "Languages::text_false"
+msgid "text_false"
+msgstr "False"
+
+msgctxt "Languages::passphrase"
+msgid "passphrase"
+msgstr "Passphrase"
